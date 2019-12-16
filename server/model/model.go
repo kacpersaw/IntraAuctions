@@ -24,6 +24,9 @@ func InitDB() *gorm.DB {
 		logrus.Panic("Ping to db failed")
 	}
 
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Auction{})
+
 	logrus.Info("Connection to database established successfully!")
 
 	return db
