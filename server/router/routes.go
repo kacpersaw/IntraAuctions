@@ -38,4 +38,11 @@ var routes = Routes{
 		"/",
 		handler.Index,
 	},
+
+	Route{
+		"Login",
+		"POST",
+		"/auth/login",
+		handler.Login,
+	},
 }

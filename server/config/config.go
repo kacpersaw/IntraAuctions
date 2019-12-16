@@ -9,15 +9,17 @@ var (
 	DB_PASSWORD string
 	DB_NAME     string
 
-	LDAP_BASE               string
-	LDAP_HOST               string
-	LDAP_PORT               int
-	LDAP_SSL                bool
-	LDAP_BIND_DN            string
-	LDAP_BIND_PASSWORD      string
-	LDAP_USER_FILTER        string
-	LDAP_ATTRIBUTES         []string
-	LDAP_USERNAME_ATTRIBUTE string
+	LDAP_BASE           string
+	LDAP_HOST           string
+	LDAP_PORT           int
+	LDAP_SSL            bool
+	LDAP_BIND_DN        string
+	LDAP_BIND_PASSWORD  string
+	LDAP_USER_FILTER    string
+	LDAP_ATTRIBUTES     []string
+	LDAP_MAIL_ATTRIBUTE string
+
+	JWT_SECRET string
 )
 
 func init() {
@@ -62,6 +64,9 @@ func init() {
 	viper.SetDefault("LDAP_ATTRIBUTES", []string{"uid", "mail"})
 	LDAP_ATTRIBUTES = viper.GetStringSlice("LDAP_ATTRIBUTES")
 
-	viper.SetDefault("LDAP_USERNAME_ATTRIBUTE", "uid")
-	LDAP_USERNAME_ATTRIBUTE = viper.GetString("LDAP_USERNAME_ATTRIBUTE")
+	viper.SetDefault("LDAP_MAIL_ATTRIBUTE", "mail")
+	LDAP_MAIL_ATTRIBUTE = viper.GetString("LDAP_MAIL_ATTRIBUTE")
+
+	viper.SetDefault("JWT_SECRET", "s3cr3t")
+	JWT_SECRET = viper.GetString("JWT_SECRET")
 }
