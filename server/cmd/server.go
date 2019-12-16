@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"gitlab.com/kacpersaw/intra-auctions/ldap"
 	"gitlab.com/kacpersaw/intra-auctions/model"
 	"gitlab.com/kacpersaw/intra-auctions/router"
 	"net/http"
@@ -19,6 +20,7 @@ var serverCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		model.DB = model.InitDB()
+		ldap.LDAP = ldap.InitLDAP()
 
 		logrus.Info("Starting API on port :" + args[0])
 		r := router.NewRouter()
