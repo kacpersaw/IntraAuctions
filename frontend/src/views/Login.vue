@@ -17,16 +17,24 @@
                     <v-toolbar-title>Login</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
+                    <v-alert
+                            :value="error !== ''"
+                            type="error"
+                    >
+                        {{error}}
+                    </v-alert>
+
                     <v-form
                     ref="form"
                     v-model="valid"
                     lazy-validation
+                    @keyup.native.enter="valid && login()"
                     >
                         <v-text-field
                                 label="Username"
                                 prepend-icon="account_box"
                                 type="text"
-                                v-model="username"
+                                v-model="form.username"
                                 :rules="usernameRules"
                                 required
                         />
@@ -35,7 +43,7 @@
                                 label="Password"
                                 prepend-icon="lock"
                                 type="password"
-                                v-model="password"
+                                v-model="form.password"
                                 :rules="passwordRules"
                                 required
                         />
@@ -43,7 +51,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="primary" :disabled="!valid">Login</v-btn>
+                    <v-btn color="primary" :disabled="!valid" @click="login()">Login</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -54,12 +62,15 @@
     import Vue from 'vue';
 
     export default Vue.extend({
-        name: 'App',
+        name: 'Login',
 
         data: () => ({
             valid: true,
-            username: '',
-            password: '',
+            form: {
+                username: '',
+                password: '',
+            },
+            error: '',
             usernameRules: [
                 (v: string) => {
                     return !!v || 'Username is required';
@@ -73,6 +84,10 @@
         }),
 
         methods: {
+            login() {
+                this.error = '';
+                this.$auth.login(this, this.form, "auction")
+            }
         }
     });
 </script>

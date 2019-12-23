@@ -20,5 +20,11 @@
         data: () => ({
             //
         }),
+
+        computed: {
+            loggedIn() {
+                return this.$auth.logged;
+            }
+        }
     });
 </script>
