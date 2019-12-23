@@ -1,4 +1,4 @@
-module gitlab.com/kacpersaw/intra-auctions
+module github.com/kacpersaw/intra-auctions
 
 go 1.13
 

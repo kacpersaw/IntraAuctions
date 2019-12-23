@@ -2,7 +2,7 @@ package ldap
 
 import (
 	"github.com/kacpersaw/go-ldap-client"
-	"gitlab.com/kacpersaw/intra-auctions/config"
+	"github.com/kacpersaw/intra-auctions/config"
 )
 
 var (

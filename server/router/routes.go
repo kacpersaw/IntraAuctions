@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
-	"gitlab.com/kacpersaw/intra-auctions/handler"
+	"github.com/kacpersaw/intra-auctions/handler"
 	"net/http"
 )
 

@@ -1,11 +1,11 @@
 package cmd
 
 import (
+	"github.com/kacpersaw/intra-auctions/ldap"
+	"github.com/kacpersaw/intra-auctions/model"
+	"github.com/kacpersaw/intra-auctions/router"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"gitlab.com/kacpersaw/intra-auctions/ldap"
-	"gitlab.com/kacpersaw/intra-auctions/model"
-	"gitlab.com/kacpersaw/intra-auctions/router"
 	"net/http"
 )
 

@@ -2,11 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/kacpersaw/intra-auctions/config"
+	"github.com/kacpersaw/intra-auctions/ldap"
+	"github.com/kacpersaw/intra-auctions/model"
+	"github.com/kacpersaw/intra-auctions/util"
 	"github.com/sirupsen/logrus"
-	"gitlab.com/kacpersaw/intra-auctions/config"
-	"gitlab.com/kacpersaw/intra-auctions/ldap"
-	"gitlab.com/kacpersaw/intra-auctions/model"
-	"gitlab.com/kacpersaw/intra-auctions/util"
 	"net/http"
 )
 

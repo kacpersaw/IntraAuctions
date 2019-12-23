@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"gitlab.com/kacpersaw/intra-auctions/config"
+	"github.com/kacpersaw/intra-auctions/config"
 	"time"
 )
 
