@@ -40,7 +40,7 @@ func init() {
 	viper.SetDefault("DB_NAME", "dev")
 	DB_NAME = viper.GetString("DB_NAME")
 
-	viper.SetDefault("LDAP_BASE", "ou=people,dc=test,dc=test")
+	viper.SetDefault("LDAP_BASE", "ou=people,dc=planetexpress,dc=com")
 	LDAP_BASE = viper.GetString("LDAP_BASE")
 
 	viper.SetDefault("LDAP_HOST", "localhost")
@@ -52,10 +52,10 @@ func init() {
 	viper.SetDefault("LDAP_SSL", false)
 	LDAP_SSL = viper.GetBool("LDAP_SSL")
 
-	viper.SetDefault("LDAP_BIND_DN", "cn=admin,dc=dev,dc=test")
+	viper.SetDefault("LDAP_BIND_DN", "cn=admin,dc=planetexpress,dc=com")
 	LDAP_BIND_DN = viper.GetString("LDAP_BIND_DN")
 
-	viper.SetDefault("LDAP_BIND_PASSWORD", "s3cr3t")
+	viper.SetDefault("LDAP_BIND_PASSWORD", "GoodNewsEveryone")
 	LDAP_BIND_PASSWORD = viper.GetString("LDAP_BIND_PASSWORD")
 
 	viper.SetDefault("LDAP_USER_FILTER", "(uid=%s)")

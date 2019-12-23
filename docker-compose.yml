@@ -19,6 +19,15 @@ services:
       - PMA_HOST=database
       - PMA_USER=dev
       - PMA_PASSWORD=dev
+  ldap:
+    image: rroemhild/test-openldap
+    ports:
+      - 389:389
+      - 636:636
+    volumes:
+      - ldapdb:/var/lib/ldap
 volumes:
   mariadb:
+    driver: local
+  ldapdb:
     driver: local
