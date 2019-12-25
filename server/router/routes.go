@@ -60,4 +60,11 @@ var routes = Routes{
 		handler.AuctionCreate,
 		true,
 	},
+	Route{
+		"Delete auction",
+		"DELETE",
+		"/auction/{id}",
+		handler.AuctionDelete,
+		true,
+	},
 }
