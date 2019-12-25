@@ -13,20 +13,25 @@ func NewRouter() *mux.Router {
 	v1 := router.PathPrefix("/v1").Subrouter()
 
 	for _, route := range routes {
-		var handler http.Handler
-		handler = route.HandlerFunc
+		var h http.Handler
+		h = route.HandlerFunc
 
-		v1.Path(route.Pattern).Handler(handler).Name(route.Name).Methods(route.Method)
+		if route.AuthRequired {
+			h = AuthMiddleware(h)
+		}
+
+		v1.Path(route.Pattern).Handler(h).Name(route.Name).Methods(route.Method)
 	}
 
 	return router
 }
 
 type Route struct {
-	Name        string
-	Method      string
-	Pattern     string
-	HandlerFunc http.HandlerFunc
+	Name         string
+	Method       string
+	Pattern      string
+	HandlerFunc  http.HandlerFunc
+	AuthRequired bool
 }
 
 type Routes []Route
@@ -37,6 +42,7 @@ var routes = Routes{
 		"GET",
 		"/",
 		handler.Index,
+		false,
 	},
 
 	Route{
@@ -44,5 +50,6 @@ var routes = Routes{
 		"POST",
 		"/auth/login",
 		handler.Login,
+		false,
 	},
 }
