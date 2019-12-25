@@ -26,12 +26,15 @@ jobs:
       working-directory: ./server
 
     - name: Build
-      run: go build -v .
+      run: |
+        export GO111MODULE=on
+        GOOS=windows GOARCH=amd64 go build -o bin/intra-auctions-server.exe
+        GOOS=linux   GOARCH=amd64 go build -o bin/intra-auctions-server-linux-amd64
       working-directory: ./server
   
-    - name: Upload artifact
+    - name: Upload artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: intra-actions
-        path: ./serve
+        name: binaries
+        path: ./server/bin/
       
