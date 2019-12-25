@@ -52,4 +52,12 @@ var routes = Routes{
 		handler.Login,
 		false,
 	},
+
+	Route{
+		"Create auction",
+		"POST",
+		"/auction",
+		handler.AuctionCreate,
+		true,
+	},
 }
