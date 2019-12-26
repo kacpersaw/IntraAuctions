@@ -16,8 +16,10 @@
                 >
                     <v-toolbar-title>Auction list</v-toolbar-title>
                     <v-spacer/>
-                    <v-btn text v-if="selected.length > 0" @click="setActive()">Set active</v-btn>
-                    <v-btn text @click="addAuctionDialog()">Add auction</v-btn>
+                    <v-btn class="ma-2" tile color="green" v-if="selected.length > 0" @click="setActive()">Set active</v-btn>
+                    <v-btn class="ma-2" tile color="red" v-if="selected.length > 0" @click="del()">Delete</v-btn>
+                    <v-divider vertical></v-divider>
+                    <v-btn class="ma-2" tile color="blue" @click="addDialog()">Add auction</v-btn>
                 </v-toolbar>
                 <v-container>
                     <v-data-table
@@ -197,7 +199,7 @@
                     this.auctions = res.data;
                 })
             },
-            addAuctionDialog() {
+            addDialog() {
                 this.dialog = true;
                 this.form = {
                     title: '',
@@ -210,7 +212,7 @@
                     images: []
                 };
             },
-            addAuction() {
+            add() {
                 let data = new FormData();
                 data.set('auction', JSON.stringify({
                     title: this.form.title,
@@ -238,6 +240,14 @@
             setActive() {
                 let selected:any = this.selected[0];
                 this.$http.put(`/v1/auction/${selected!.id}/active`).then((res) => {
+                    this.selected = []
+                    this.list()
+                })
+            },
+            del() {
+                let selected:any = this.selected[0];
+                this.$http.delete(`/v1/auction/${selected!.id}`).then((res) => {
+                    this.selected = []
                     this.list()
                 })
             }

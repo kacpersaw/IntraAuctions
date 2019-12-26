@@ -32,9 +32,7 @@ var serverCmd = &cobra.Command{
 		r := router.NewRouter()
 		logrus.Fatal(http.ListenAndServe(
 			":"+args[0],
-			router.CommonMiddleware(
-				router.CorsMiddleware(r),
-			),
+			router.CorsMiddleware(r),
 		))
 	},
 }
