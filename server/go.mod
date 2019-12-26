@@ -12,6 +12,7 @@ require (
 	github.com/kacpersaw/go-ldap-client v0.0.0-20191226140217-9276bf8d2584
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/rs/cors v1.7.0
+	github.com/segmentio/ksuid v1.0.2
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2

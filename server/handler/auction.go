@@ -3,10 +3,15 @@ package handler
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/kacpersaw/intra-auctions/config"
 	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/kacpersaw/intra-auctions/util"
+	"github.com/segmentio/ksuid"
 	"github.com/sirupsen/logrus"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -23,8 +28,44 @@ type AuctionRequest struct {
 }
 
 func AuctionCreate(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(100000)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	m := r.MultipartForm
+	var images []model.Image
+	files := m.File["images"]
+	for i, _ := range files {
+		file, err := files[i].Open()
+		defer file.Close()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		filename := ksuid.New().String() + filepath.Ext(files[i].Filename)
+
+		destination, err := os.Create(config.IMG_DIR + "/" + filename)
+		defer destination.Close()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if _, err := io.Copy(destination, file); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		images = append(images, model.Image{
+			Url: "/images/" + filename,
+		})
+	}
+
 	data := AuctionRequest{}
-	err := json.NewDecoder(r.Body).Decode(&data)
+	err = json.Unmarshal([]byte(r.FormValue("auction")), &data)
 	if err != nil {
 		logrus.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -41,6 +82,7 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 		ActualPrice:      0,
 		StartDate:        data.StartDate,
 		EndDate:          data.EndDate,
+		Images:           images,
 	}
 	model.DB.Save(&auction)
 

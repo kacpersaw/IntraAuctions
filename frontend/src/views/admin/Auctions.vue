@@ -110,6 +110,16 @@
                                 >
                                 </v-datetime-picker>
                             </v-col>
+                            <v-col cols="12">
+                                <v-file-input
+                                        accept="image/*"
+                                        multiple
+                                        label="Pictures"
+                                        prepend-icon="camera"
+                                        chips
+                                        v-model="form.images">
+                                </v-file-input>
+                            </v-col>
                         </v-row>
                     </v-container>
                 </v-card-text>
@@ -142,6 +152,7 @@
                 minimum_bid: 0,
                 start_date: new Date(),
                 end_date: new Date(),
+                images: []
             },
             timePickerProps: {
                 format: '24h'
@@ -192,10 +203,12 @@
                     minimum_bid: 0,
                     start_date: new Date(),
                     end_date: new Date(),
+                    images: []
                 };
             },
             addAuction() {
-                this.$http.post('/v1/auction', {
+                let data = new FormData();
+                data.set('auction', JSON.stringify({
                     title: this.form.title,
                     short_description: this.form.short_description,
                     description: this.form.description,
@@ -203,6 +216,14 @@
                     minimum_bid: +this.form.minimum_bid,
                     start_date: this.form.start_date.toISOString(),
                     end_date: this.form.end_date.toISOString(),
+                }));
+
+                this.form.images.forEach((img) => {
+                    data.append('images', img)
+                });
+
+                this.$http.post('/v1/auction', data, {
+                    headers: {'Content-Type': 'multipart/form-data'}
                 }).then((res: any) => {
                     this.dialog = false;
                     this.list()

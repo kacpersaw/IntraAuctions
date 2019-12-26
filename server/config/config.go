@@ -21,6 +21,8 @@ var (
 	LDAP_ADMIN_GROUP_NAME string
 
 	JWT_SECRET string
+
+	IMG_DIR string
 )
 
 func init() {
@@ -73,4 +75,7 @@ func init() {
 
 	viper.SetDefault("JWT_SECRET", "s3cr3t")
 	JWT_SECRET = viper.GetString("JWT_SECRET")
+
+	viper.SetDefault("IMG_DIR", "/tmp/intra-auctions")
+	IMG_DIR = viper.GetString("IMG_DIR")
 }

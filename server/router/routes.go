@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/kacpersaw/intra-auctions/config"
 	"github.com/kacpersaw/intra-auctions/handler"
 	"net/http"
 )
@@ -9,6 +10,9 @@ import (
 func NewRouter() *mux.Router {
 	router := mux.NewRouter()
 	router.StrictSlash(true)
+
+	router.PathPrefix("/images/").
+		Handler(http.StripPrefix("/images/", http.FileServer(http.Dir(config.IMG_DIR))))
 
 	v1 := router.PathPrefix("/v1").Subrouter()
 
