@@ -51,3 +51,11 @@ func AuctionDelete(w http.ResponseWriter, r *http.Request) {
 	model.DB.Where("id = ?", params["id"]).Delete(model.Auction{})
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func AuctionList(w http.ResponseWriter, r *http.Request) {
+	var auctions []model.Auction
+	model.DB.Order("id desc").Find(&auctions)
+
+	w.WriteHeader(http.StatusOK)
+	util.MustEncode(json.NewEncoder(w), auctions)
+}

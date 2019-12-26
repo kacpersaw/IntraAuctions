@@ -47,6 +47,7 @@ var routes = Routes{
 		false,
 	},
 
+	//Auth
 	Route{
 		"Login",
 		"POST",
@@ -56,11 +57,20 @@ var routes = Routes{
 		false,
 	},
 
+	//Auctions
 	Route{
 		"Create auction",
 		"POST",
 		"/auction",
 		handler.AuctionCreate,
+		true,
+		true,
+	},
+	Route{
+		"List auctions",
+		"GET",
+		"/auction",
+		handler.AuctionList,
 		true,
 		true,
 	},
