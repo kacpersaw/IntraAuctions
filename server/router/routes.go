@@ -18,7 +18,7 @@ func NewRouter() *mux.Router {
 
 	for _, route := range routes {
 		var h http.Handler
-		h = route.HandlerFunc
+		h = CommonMiddleware(route.HandlerFunc)
 
 		if route.AuthRequired {
 			h = AuthMiddleware(h)
@@ -79,11 +79,27 @@ var routes = Routes{
 		true,
 	},
 	Route{
+			"Get active auction",
+			"GET",
+			"/auction/active",
+			handler.AuctionGetActive,
+			true,
+			false,
+	},
+	Route{
 		"Delete auction",
 		"DELETE",
 		"/auction/{id}",
 		handler.AuctionDelete,
 		true,
 		true,
+	},
+	Route{
+			"Set active auction",
+			"PUT",
+			"/auction/{id}/active",
+			handler.AuctionSetActive,
+			true,
+			true,
 	},
 }

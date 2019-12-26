@@ -7,22 +7,23 @@ import axios, {AxiosStatic} from "axios";
 import auth, {AuthInterface} from './auth';
 // @ts-ignore
 import DatetimePicker from 'vuetify-datetime-picker'
+import Lightbox from 'vue-easy-lightbox';
+
 Vue.use(DatetimePicker);
+Vue.use(Lightbox);
 
 Vue.config.productionTip = false;
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 Vue.prototype.$http = axios;
+Vue.prototype.$auth = auth;
+Vue.prototype.$apiUrl = process.env.VUE_APP_API_URL;
+
 declare module 'vue/types/vue' {
   interface Vue {
     $http: AxiosStatic;
-  }
-}
-
-Vue.prototype.$auth = auth;
-declare module 'vue/types/vue' {
-  interface Vue {
-    $auth: AuthInterface
+    $auth: AuthInterface;
+    $apiUrl: string;
   }
 }
 

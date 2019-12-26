@@ -103,3 +103,21 @@ func AuctionList(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	util.MustEncode(json.NewEncoder(w), auctions)
 }
+
+func AuctionSetActive(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	model.DB.Model(&model.Auction{}).Where("active = ?", true).Update("active", false)
+	model.DB.Model(&model.Auction{}).Where("id = ?", params["id"]).Update("active", true)
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func AuctionGetActive(w http.ResponseWriter, r *http.Request) {
+	var auction model.Auction
+	model.DB.Where("active = ?", true).First(&auction)
+	model.DB.Model(&auction).Related(&auction.Images)
+
+	w.WriteHeader(http.StatusOK)
+	util.MustEncode(json.NewEncoder(w), auction)
+}

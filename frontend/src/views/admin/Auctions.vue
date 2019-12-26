@@ -16,6 +16,7 @@
                 >
                     <v-toolbar-title>Auction list</v-toolbar-title>
                     <v-spacer/>
+                    <v-btn text v-if="selected.length > 0" @click="setActive()">Set active</v-btn>
                     <v-btn text @click="addAuctionDialog()">Add auction</v-btn>
                 </v-toolbar>
                 <v-container>
@@ -23,6 +24,9 @@
                             :headers="headers"
                             :items="auctions"
                             :items-per-page="5"
+                            show-select
+                            v-model="selected"
+                            :single-select="true"
                     >
                         <template v-slot:item.start_date="{ item }">
                             {{item.start_date | formatDate}}
@@ -115,7 +119,6 @@
                                         accept="image/*"
                                         multiple
                                         label="Pictures"
-                                        prepend-icon="camera"
                                         chips
                                         v-model="form.images">
                                 </v-file-input>
@@ -143,6 +146,7 @@
         data: () => ({
             auctions: [],
             dialog: false,
+            selected: [],
             error: '',
             form: {
                 title: '',
@@ -229,6 +233,12 @@
                     this.list()
                 }).catch((res: any) => {
                     this.error = 'Invalid error occurred. Try again.'
+                })
+            },
+            setActive() {
+                let selected:any = this.selected[0];
+                this.$http.put(`/v1/auction/${selected!.id}/active`).then((res) => {
+                    this.list()
                 })
             }
         },
