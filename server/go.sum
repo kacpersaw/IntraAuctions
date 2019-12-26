@@ -75,6 +75,8 @@ github.com/jtblin/go-ldap-client v0.0.0-20170223121919-b73f66626b33/go.mod h1:+0
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/kacpersaw/go-ldap-client v0.0.0-20191216200034-7961342faa1d h1:vfHw67bkvadZ08km0+MHW/DoYHHAwtUTmaav1KdBP58=
 github.com/kacpersaw/go-ldap-client v0.0.0-20191216200034-7961342faa1d/go.mod h1:9ms6uMUxO98OMZnmnEy+BTtcDSZqYhwbU2wYjf0+xh4=
+github.com/kacpersaw/go-ldap-client v0.0.0-20191226140217-9276bf8d2584 h1:uKaSa/Lt8l9tROMMKYp5j7UGQMRk1aEnJQz4rdNuIwU=
+github.com/kacpersaw/go-ldap-client v0.0.0-20191226140217-9276bf8d2584/go.mod h1:9ms6uMUxO98OMZnmnEy+BTtcDSZqYhwbU2wYjf0+xh4=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=

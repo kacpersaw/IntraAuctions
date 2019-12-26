@@ -27,11 +27,12 @@ func NewRouter() *mux.Router {
 }
 
 type Route struct {
-	Name         string
-	Method       string
-	Pattern      string
-	HandlerFunc  http.HandlerFunc
-	AuthRequired bool
+	Name          string
+	Method        string
+	Pattern       string
+	HandlerFunc   http.HandlerFunc
+	AuthRequired  bool
+	AdminRequired bool
 }
 
 type Routes []Route
@@ -43,6 +44,7 @@ var routes = Routes{
 		"/",
 		handler.Index,
 		false,
+		false,
 	},
 
 	Route{
@@ -50,6 +52,7 @@ var routes = Routes{
 		"POST",
 		"/auth/login",
 		handler.Login,
+		false,
 		false,
 	},
 
@@ -59,12 +62,14 @@ var routes = Routes{
 		"/auction",
 		handler.AuctionCreate,
 		true,
+		true,
 	},
 	Route{
 		"Delete auction",
 		"DELETE",
 		"/auction/{id}",
 		handler.AuctionDelete,
+		true,
 		true,
 	},
 }

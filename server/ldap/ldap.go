@@ -3,6 +3,7 @@ package ldap
 import (
 	"github.com/kacpersaw/go-ldap-client"
 	"github.com/kacpersaw/intra-auctions/config"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -19,8 +20,15 @@ func InitLDAP() *ldap.LDAPClient {
 		BindPassword: config.LDAP_BIND_PASSWORD,
 		UserFilter:   config.LDAP_USER_FILTER,
 		Attributes:   config.LDAP_ATTRIBUTES,
+		GroupFilter:  config.LDAP_GROUP_FILTER,
 	}
 	defer client.Close()
+
+	err := client.Connect()
+	if err != nil {
+		logrus.Error(err.Error())
+		panic("Failed to connect to ldap")
+	}
 
 	return client
 }

@@ -4,7 +4,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/context"
 	"github.com/kacpersaw/intra-auctions/config"
-	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/rs/cors"
 	"net/http"
 	"strings"
@@ -43,12 +42,20 @@ func AuthMiddleware(handler http.Handler) http.Handler {
 			return
 		}
 
-		var user model.User
-		if model.DB.Where("id = ?", token.Claims.(jwt.MapClaims)["uid"].(string)).First(&user).RecordNotFound() {
+		context.Set(r, "uid", token.Claims.(jwt.MapClaims)["uid"].(string))
+		context.Set(r, "admin", token.Claims.(jwt.MapClaims)["admin"].(bool))
+
+		handler.ServeHTTP(w, r)
+	})
+}
+
+func AdminMiddleware(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		admin := context.Get(r, "admin").(bool)
+		if !admin {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-		context.Set(r, "user", user)
 
 		handler.ServeHTTP(w, r)
 	})

@@ -9,6 +9,15 @@ func MustEncode(enc *json.Encoder, v interface{}) {
 	}
 }
 
+func StringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
 type GenericResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`

@@ -15,7 +15,7 @@ func init() {
 
 var serverCmd = &cobra.Command{
 	Use:   "server [port]",
-	Short: "Start wsb_projekt server",
+	Short: "Start server",
 	Long:  "",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/jinzhu/gorm v1.9.11
 	github.com/jtblin/go-ldap-client v0.0.0-20170223121919-b73f66626b33 // indirect
-	github.com/kacpersaw/go-ldap-client v0.0.0-20191216200034-7961342faa1d
+	github.com/kacpersaw/go-ldap-client v0.0.0-20191226140217-9276bf8d2584
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/rs/cors v1.7.0
 	github.com/sirupsen/logrus v1.4.2

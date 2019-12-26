@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/kacpersaw/intra-auctions/util"
@@ -23,12 +22,6 @@ type AuctionRequest struct {
 }
 
 func AuctionCreate(w http.ResponseWriter, r *http.Request) {
-	user := context.Get(r, "user").(model.User)
-	if !user.Admin {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
 	data := AuctionRequest{}
 	err := json.NewDecoder(r.Body).Decode(data)
 	if err != nil {
@@ -54,12 +47,6 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func AuctionDelete(w http.ResponseWriter, r *http.Request) {
-	user := context.Get(r, "user").(model.User)
-	if !user.Admin {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
 	params := mux.Vars(r)
 	model.DB.Where("id = ?", params["id"]).Delete(model.Auction{})
 	w.WriteHeader(http.StatusNoContent)
