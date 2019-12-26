@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode';
 export interface AuthInterface {
     username: string;
     logged: boolean;
+    admin: boolean;
     login(context: any, data: any, redirect: any): any;
     logout(): any;
     checkAuthentication(): any;
@@ -17,6 +18,7 @@ export default new Vue({
         email: '',
         username: '',
         logged: false,
+        admin: false,
     },
 
     methods: {
@@ -24,10 +26,12 @@ export default new Vue({
             this.$http.post('/v1/auth/login', data).then((res: any) => {
                 if (res.data.token) {
                     const decoded: any = jwt_decode(res.data.token);
-                    this.username = decoded.username;
+                    this.username = decoded.uid;
 
                     localStorage.setItem('token', res.data.token);
                     this.logged = true;
+
+                    this.admin = decoded.admin;
 
                     axios.defaults.headers.common.Authorization = this.getAuthorizationHeader();
 
@@ -54,8 +58,8 @@ export default new Vue({
             if (token) {
                 this.logged = true;
                 const decoded: any = jwt_decode(token);
-                this.username = decoded.username;
-                this.email = decoded.email;
+                this.username = decoded.uid;
+                this.admin = decoded.admin;
                 axios.defaults.headers.common.Authorization = this.getAuthorizationHeader();
             } else {
                 this.logged = false;

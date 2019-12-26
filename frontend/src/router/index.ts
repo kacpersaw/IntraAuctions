@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Auction from '../views/Auction.vue'
 import auth from '../auth'
 
 Vue.use(VueRouter)
@@ -13,14 +13,23 @@ const ifAuthenticated = (to: any, from: any, next: any) => {
   next('/login')
 };
 
+const ifAdmin = (to: any, from: any, next: any) => {
+  if(auth.logged && auth.admin) {
+    next();
+    return
+  }
+  next('/')
+};
+
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'auctoin',
     meta: {
-      title: 'Home',
+      title: 'Auction',
     },
-    component: Home
+    component: Auction,
+    beforeEnter: ifAuthenticated
   },
   {
     path: '/login',
@@ -31,21 +40,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
   {
-    path: '/auction',
-    name: 'auction',
+    path: '/admin/auctions',
+    name: 'auctions',
     meta: {
-      title: 'Auction',
+      title: 'Auctions',
     },
-    beforeEnter: ifAuthenticated,
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "auction" */ '../views/Auction.vue')
+    beforeEnter: ifAdmin,
+    component: () => import(/* webpackChunkName: "auction" */ '../views/admin/Auctions.vue')
   }
-]
+];
 
 const router = new VueRouter({
   routes
-})
+});
 
 export default router

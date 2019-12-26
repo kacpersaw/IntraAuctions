@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/kacpersaw/intra-auctions/util"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -23,8 +24,9 @@ type AuctionRequest struct {
 
 func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 	data := AuctionRequest{}
-	err := json.NewDecoder(r.Body).Decode(data)
+	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		logrus.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -40,7 +42,7 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 		StartDate:        data.StartDate,
 		EndDate:          data.EndDate,
 	}
-	model.DB.Save(auction)
+	model.DB.Save(&auction)
 
 	w.WriteHeader(http.StatusOK)
 	util.MustEncode(json.NewEncoder(w), auction)
