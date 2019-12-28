@@ -1,9 +1,14 @@
 package model
 
-import "time"
+import (
+	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
+	"log"
+	"time"
+)
 
 type Auction struct {
-	ID int `gorm:"primary_key" json:"id"`
+	ID uuid.UUID `gorm:"primary_key;type:varchar(36)" json:"id"`
 
 	Active bool `gorm:"column:active" json:"active"`
 
@@ -30,4 +35,14 @@ type Auction struct {
 
 	// Deleted at timestamp
 	DeletedAt *time.Time `json:"-"`
+}
+
+func (a *Auction) BeforeCreate(scope *gorm.Scope) error {
+	uuidGen, err := uuid.NewV4()
+	if err != nil {
+		log.Println(err)
+	}
+	scope.SetColumn("ID", uuidGen)
+
+	return nil
 }
