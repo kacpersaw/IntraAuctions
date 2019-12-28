@@ -17,7 +17,7 @@ type Auction struct {
 	Description      string `gorm:"column:description" json:"description"`
 
 	StartPrice  float32 `gorm:"column:start_price" json:"start_price"`
-	MinimumBid  float32 `gorm:"column:minimum_bid" json:"minimum_bid"`
+	MinimalBid  float32 `gorm:"column:minimal_bid" json:"minimal_bid"`
 	ActualPrice float32 `gorm:"column:actual_price" json:"actual_price"`
 
 	StartDate time.Time `gorm:"column:start_date" json:"start_date"`
