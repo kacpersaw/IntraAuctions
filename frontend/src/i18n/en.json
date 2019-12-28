@@ -1,0 +1,10 @@
+{
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "loginButton": "Login",
+  "usernameRequired": "Username is required",
+  "passwordRequired": "Password is required",
+
+  "networkError": "Network error"
+}
