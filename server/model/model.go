@@ -26,6 +26,7 @@ func InitDB() *gorm.DB {
 
 	db.AutoMigrate(&Auction{})
 	db.AutoMigrate(&Image{})
+	db.AutoMigrate(&Bid{})
 
 	logrus.Info("Connection to database established successfully!")
 

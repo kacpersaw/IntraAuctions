@@ -18,7 +18,9 @@ type Auction struct {
 	StartDate time.Time `gorm:"column:start_date" json:"start_date"`
 	EndDate   time.Time `gorm:"column:end_date" json:"end_date"`
 
-	Images []Image `gorm:"foreignkey:AuctionID"json:"images"`
+	Images []Image `gorm:"foreignkey:AuctionID "json:"images"`
+
+	Bids []Bid `gorm:"foreignkey:AuctionID" json:"bids"`
 
 	// Created at timestamp
 	CreatedAt time.Time `json:"created_at"`
