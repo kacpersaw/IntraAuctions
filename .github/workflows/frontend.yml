@@ -12,5 +12,6 @@ jobs:
         node-version: '10.x'
     - name: Build
       run: yarn build
+      working-directory: ./frontend
       env:
         VUE_APP_API_URL: http://localhost:9000
