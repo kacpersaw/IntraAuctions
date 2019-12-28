@@ -17,9 +17,9 @@
                     <v-toolbar-title>Auction list</v-toolbar-title>
                     <v-spacer/>
                     <v-btn class="ma-2" tile color="green" v-if="selected.length > 0" @click="setActive()">Set active</v-btn>
-                    <v-btn class="ma-2" tile color="red" v-if="selected.length > 0" @click="del()">Delete</v-btn>
+                    <v-btn class="ma-2" tile color="red" v-if="selected.length > 0" @click="deleteAuction()">Delete</v-btn>
                     <v-divider vertical></v-divider>
-                    <v-btn class="ma-2" tile color="blue" @click="addDialog()">Add auction</v-btn>
+                    <v-btn class="ma-2" tile color="blue" @click="addAuctionDialog()">Add auction</v-btn>
                 </v-toolbar>
                 <v-container>
                     <v-data-table
@@ -53,12 +53,6 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-alert
-                                :value="error !== ''"
-                                type="error"
-                        >
-                            {{error}}
-                        </v-alert>
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field
@@ -132,7 +126,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" text @click="add()">Add</v-btn>
+                    <v-btn color="blue darken-1" text @click="addAuction()">Add</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -142,15 +136,15 @@
 <script lang="ts">
     import Vue from 'vue';
     import moment from "moment";
+    import {Auction} from "@/types/api";
 
     export default Vue.extend({
         name: 'Auctions',
 
         data: () => ({
-            auctions: [],
+            auctions: [] as Auction[],
             dialog: false,
-            selected: [],
-            error: '',
+            selected: [] as Auction[],
             form: {
                 title: '',
                 short_description: '',
@@ -185,17 +179,17 @@
             ]
         }),
 
-        mounted() {
-            this.list()
+        mounted(): void {
+            this.listAuctions()
         },
 
         methods: {
-            list() {
-                this.$http.get('/v1/auction').then((res: any) => {
+            listAuctions(): void {
+                this.$http.get('/v1/auction').then((res) => {
                     this.auctions = res.data;
                 })
             },
-            addDialog() {
+            addAuctionDialog(): void {
                 this.dialog = true;
                 this.form = {
                     title: '',
@@ -208,7 +202,7 @@
                     images: []
                 };
             },
-            add() {
+            addAuction(): void {
                 let data = new FormData();
                 data.set('auction', JSON.stringify({
                     title: this.form.title,
@@ -226,36 +220,48 @@
 
                 this.$http.post('/v1/auction', data, {
                     headers: {'Content-Type': 'multipart/form-data'}
-                }).then((res: any) => {
+                }).then((res) => {
+                    this.$toast('Auction created successfully!', {
+                        color: 'success',
+                    });
                     this.dialog = false;
-                    this.list()
+                    this.listAuctions()
                 }).catch((res: any) => {
-                    this.error = 'Invalid error occurred. Try again.'
+                    this.$toast('Invalid error occurred. Try again.', {
+                        color: 'red',
+                    })
                 })
             },
             setActive() {
                 let selected:any = this.selected[0];
                 this.$http.put(`/v1/auction/${selected!.id}/active`).then((res) => {
-                    this.selected = []
-                    this.list()
+                    this.$toast('Auction was set to active!', {
+                        color: 'success',
+                    });
+                    this.selected = [];
+                    this.listAuctions()
                 })
             },
-            del() {
+            deleteAuction(): void {
                 let selected:any = this.selected[0];
                 this.$http.delete(`/v1/auction/${selected!.id}`).then((res) => {
-                    this.selected = []
-                    this.list()
+                    this.$toast('Removed auction successfully!', {
+                        color: 'success',
+                    });
+                    this.selected = [];
+                    this.listAuctions()
                 })
             },
-            goToAuction(item: any) {
+            goToAuction(item: Auction): void {
                 this.$router.push("/admin/auction/" + item.id);
             }
         },
         filters: {
-            formatDate: function (value: string) {
+            formatDate(value: string): string {
                 if (value) {
                     return moment(value).format('DD-MM-YYYY HH:mm')
                 }
+                return ""
             }
         }
     });

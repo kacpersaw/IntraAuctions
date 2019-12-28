@@ -37,7 +37,7 @@
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
-                                    <v-list-item-title>{{auction.description}}</v-list-item-title>
+                                    <p>{{auction.description}}</p>
                                     <v-list-item-subtitle>Description</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
@@ -82,8 +82,8 @@
                                 >
                                     <v-card flat tile class="d-flex">
                                         <v-img
-                                                :src="`${apiUrl}/${img.url}`"
-                                                :lazy-src="`${apiUrl}/${img.url}`"
+                                                :src="getImageUrl(img.url)"
+                                                :lazy-src="getImageUrl(img.url)"
                                                 aspect-ratio="1"
                                                 class="grey lighten-2"
                                         >
@@ -132,12 +132,13 @@
 <script lang="ts">
     import Vue from 'vue';
     import moment from "moment";
+    import {Auction} from "@/types/api";
 
     export default Vue.extend({
         name: 'AuctionDetails',
 
         data: () => ({
-            auction: {},
+            auction: {} as Auction,
             headers: [
                 {
                     text: 'Username',
@@ -159,27 +160,25 @@
             this.getAuction()
         },
 
-        computed: {
-            apiUrl() {
-                return this.$apiUrl;
-            },
-        },
-
         methods: {
-            getAuction() {
-                this.$http.get('/v1/auction/' + this.$route.params.id).then((res: any) => {
+            getAuction(): void {
+                this.$http.get('/v1/auction/' + this.$route.params.id).then((res) => {
                     this.auction = res.data;
                 })
             },
-            goToAuctions() {
+            goToAuctions(): void {
                 this.$router.push("/admin/auctions");
-            }
+            },
+            getImageUrl(path: string): string {
+                return this.$apiUrl + '/' + path;
+            },
         },
         filters: {
-            formatDate: function (value: string) {
+            formatDate(value: string): string {
                 if (value) {
-                    return moment(value).format('DD-MM-YYYY HH:mm')
+                    return moment(value).format('DD-MM-YYYY HH:mm:ss')
                 }
+                return ""
             }
         }
     });
