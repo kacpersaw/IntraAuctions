@@ -47,7 +47,16 @@ const routes = [
     },
     beforeEnter: ifAdmin,
     component: () => import(/* webpackChunkName: "auction" */ '../views/admin/Auctions.vue')
-  }
+  },
+  {
+    path: '/admin/auction/:id',
+    name: 'auctions-details',
+    meta: {
+      title: 'Auctions Details',
+    },
+    beforeEnter: ifAdmin,
+    component: () => import(/* webpackChunkName: "auction-details" */ '../views/admin/AuctionDetails.vue')
+  },
 ];
 
 const router = new VueRouter({

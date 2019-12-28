@@ -29,6 +29,7 @@
                             show-select
                             v-model="selected"
                             :single-select="true"
+                            @click:row="goToAuction"
                     >
                         <template v-slot:item.start_date="{ item }">
                             {{item.start_date | formatDate}}
@@ -165,14 +166,9 @@
             },
             headers: [
                 {
-                    text: '#',
-                    align: 'left',
-                    sortable: false,
-                    value: 'id'
-                },
-                {
                     text: 'Title',
                     value: 'title',
+                    align: 'left',
                 },
                 {
                     text: 'Start date',
@@ -250,6 +246,9 @@
                     this.selected = []
                     this.list()
                 })
+            },
+            goToAuction(item: any) {
+                this.$router.push("/admin/auction/" + item.id);
             }
         },
         filters: {
