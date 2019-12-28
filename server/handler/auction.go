@@ -22,7 +22,7 @@ type AuctionRequest struct {
 	Description      string `json:"description"`
 
 	StartPrice float32 `json:"start_price"`
-	MinimumBid float32 `json:"minimum_bid"`
+	MinimalBid float32 `json:"minimal_bid"`
 
 	StartDate time.Time `json:"start_date"`
 	EndDate   time.Time `json:"end_date"`
@@ -53,7 +53,7 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 		ShortDescription: data.ShortDescription,
 		Description:      data.Description,
 		StartPrice:       data.StartPrice,
-		MinimumBid:       data.MinimumBid,
+		MinimalBid:       data.MinimalBid,
 		ActualPrice:      data.StartPrice,
 		StartDate:        data.StartDate,
 		EndDate:          data.EndDate,
@@ -163,7 +163,7 @@ func AuctionBid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if data.Bid <= 0 || data.Bid < auction.MinimumBid {
+	if data.Bid <= 0 || data.Bid < auction.MinimalBid {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

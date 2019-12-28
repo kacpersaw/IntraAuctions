@@ -11,7 +11,6 @@
                 </v-toolbar-items>
             </v-toolbar>
             <v-container
-                    class="fill-height"
                     fluid
             >
                 <router-view></router-view>

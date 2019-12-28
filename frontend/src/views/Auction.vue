@@ -21,7 +21,7 @@
                             color="red"
                             text-color="white"
                     >
-                        End within
+                        End {{timer}}
                         <v-icon right>mdi-clock</v-icon>
                     </v-chip>
                     <v-menu bottom left>
@@ -65,11 +65,11 @@
                                 >
                                     <v-card flat tile class="d-flex">
                                         <v-img
-                                                :src="`${apiUrl}/${img.url}`"
-                                                :lazy-src="`${apiUrl}/${img.url}`"
+                                                :src="getImageUrl(img.url)"
+                                                :lazy-src="getImageUrl(img.url)"
                                                 aspect-ratio="1"
                                                 class="grey lighten-2"
-                                                @click="open(`${apiUrl}/${img.url}`)"
+                                                @click="open(getImageUrl(img.url))"
                                                 style="cursor: pointer;"
                                         >
                                             <template v-slot:placeholder>
@@ -96,21 +96,31 @@
                             <p class="display-1 mb-0">{{auction.actual_price}} zł</p>
                         </v-col>
                     </v-row>
-                    <v-row justify="center">
-                        <v-col md="4">
-                            <v-text-field
-                                    label="Your offer"
-                                    outlined
-                                    suffix="zł"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col md="2">
-                            <v-btn block
-                                   color="primary"
-                                   height="55"
-                            >Bid</v-btn>
-                        </v-col>
-                    </v-row>
+                    <v-form v-model="bidValid">
+                        <v-row justify="center">
+                            <v-col md="4">
+                                <v-text-field
+                                        label="Your offer"
+                                        outlined
+                                        suffix="zł"
+                                        type="number"
+                                        step="0.1"
+                                        :rules="bidRules"
+                                        v-model="bid"
+                                >
+                                </v-text-field>
+                            </v-col>
+                            <v-col md="2">
+                                <v-btn block
+                                       color="primary"
+                                       height="55"
+                                       :disabled="!bidValid"
+                                       @click="bidAuction()"
+                                >Bid
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-form>
                 </v-container>
             </v-card>
         </v-col>
@@ -128,48 +138,93 @@
 <script lang="ts">
     import Vue from 'vue';
     import moment from "moment";
+    import {Auction} from '@/types/api';
 
     export default Vue.extend({
         name: 'Auctions',
 
         data: () => ({
-            auction: {},
-            img: 'http://localhost:9090/images/1VXURDlR25r9AcXRc5SWjVJlzOg.jpg',
+            auction: {} as Auction,
+            img: '',
             visible: false,
+            bidValid: true,
+            bid: 0,
+            interval: 0,
+            now: new Date(),
         }),
 
         computed: {
-            apiUrl() {
-                return this.$apiUrl;
+            bidRules() {
+                return [
+                    (val: number) => !!val || 'Required',
+                    (val: number) => val >= this.auction.minimal_bid || 'Minimal bid is ' + this.auction.minimal_bid
+                ]
             },
+            timer() {
+                // @ts-ignore
+                let c = this.countdown(this.now, this.auction.end_date);
+                return moment(this.now).to(this.auction.end_date) + ' (' + c + ')';
+            }
         },
 
         mounted() {
-            this.getActive()
+            this.getActive();
+
+            this.interval = setInterval(() => {
+                this.now = new Date()
+            }, 1000)
         },
 
         methods: {
             getActive() {
-                this.$http.get('/v1/auction/active').then((res: any) => {
+                this.$http.get('/v1/auction/active').then((res) => {
                     this.auction = res.data;
+                    this.auction.end_date = moment(res.data.end_date).toDate();
+                    this.auction.start_date = moment(res.data.start_date).toDate();
+                    this.bid = this.auction.minimal_bid
                 })
             },
             open(url: string) {
-                // eslint-disable-next-line no-console
-                console.log(url);
                 this.img = url;
                 this.visible = true;
             },
             logout() {
                 this.$auth.logout();
+            },
+            getImageUrl(path: string): string {
+                return this.$apiUrl + '/' + path;
+            },
+            bidAuction() {
+                this.$http.put('/v1/auction/' + this.auction.id + '/bid', {
+                    bid: this.bid as number
+                }).then((res) => {
+                    this.$toast('Bid made successfully!', {
+                        color: 'success',
+                    });
+
+                    this.getActive()
+                }).catch((err) => {
+                    this.$toast('Something went wrong :(', {
+                        color: 'red',
+                    })
+                })
+            },
+            countdown(now: any, then: any): string {
+                return 0 < then - now
+                    ? moment.utc(then - now).format('HH:mm:ss')
+                    : '- ' + moment.utc(now - then).format('HH:mm:ss')
             }
         },
         filters: {
-            formatDate: function (value: string) {
+            formatDate: function (value: string): string {
                 if (value) {
                     return moment(value).format('DD-MM-YYYY HH:mm')
                 }
+                return ""
             }
+        },
+        beforeDestroy(): void {
+            clearInterval(this.interval)
         }
     });
 </script>
