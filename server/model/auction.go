@@ -1,9 +1,14 @@
 package model
 
-import "time"
+import (
+	"github.com/gofrs/uuid"
+	"github.com/jinzhu/gorm"
+	"log"
+	"time"
+)
 
 type Auction struct {
-	ID int `gorm:"primary_key" json:"id"`
+	ID uuid.UUID `gorm:"type:varchar(36);primary_key;column:id" json:"id"`
 
 	Active bool `gorm:"column:active" json:"active"`
 
@@ -18,6 +23,10 @@ type Auction struct {
 	StartDate time.Time `gorm:"column:start_date" json:"start_date"`
 	EndDate   time.Time `gorm:"column:end_date" json:"end_date"`
 
+	Images []Image `gorm:"foreignkey:AuctionID "json:"images"`
+
+	Bids []Bid `gorm:"foreignkey:AuctionID" json:"bids"`
+
 	// Created at timestamp
 	CreatedAt time.Time `json:"created_at"`
 
@@ -26,4 +35,14 @@ type Auction struct {
 
 	// Deleted at timestamp
 	DeletedAt *time.Time `json:"-"`
+}
+
+func (a *Auction) BeforeCreate(scope *gorm.Scope) error {
+	uuidGen, err := uuid.NewV4()
+	if err != nil {
+		log.Println(err)
+	}
+	scope.SetColumn("ID", uuidGen)
+
+	return nil
 }

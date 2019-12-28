@@ -2,12 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/kacpersaw/intra-auctions/config"
 	"github.com/kacpersaw/intra-auctions/ldap"
-	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/kacpersaw/intra-auctions/util"
 	"github.com/sirupsen/logrus"
 	"net/http"
+	"time"
 )
 
 type AuthLoginRequest struct {
@@ -54,15 +55,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := model.User{
-		Username: loginRequest.Username,
-		Email:    ldapUser[config.LDAP_MAIL_ATTRIBUTE],
-		Admin:    false,
+	groups, err := ldap.LDAP.GetGroupsOfUser(loginRequest.Username)
+	if err != nil {
+		logrus.Error(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	model.DB.Where("username = ?", loginRequest.Username).FirstOrCreate(&user)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"exp":   time.Now().Add(time.Hour * 48).Unix(),
+		"uid":   ldapUser["uid"],
+		"admin": util.StringInSlice(config.LDAP_ADMIN_GROUP_NAME, groups),
+	})
 
-	token, err := user.GenerateJWT()
+	tokenString, err := token.SignedString([]byte(config.JWT_SECRET))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		util.MustEncode(json.NewEncoder(w), util.GenericResponse{
@@ -72,5 +77,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	util.MustEncode(json.NewEncoder(w), TokenResponse{Token: token})
+	util.MustEncode(json.NewEncoder(w), TokenResponse{Token: tokenString})
 }

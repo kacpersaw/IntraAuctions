@@ -1,6 +1,15 @@
 <template>
     <v-app>
         <v-content>
+            <v-toolbar v-if="admin">
+                <v-toolbar-title>Administration</v-toolbar-title>
+
+                <v-spacer></v-spacer>
+
+                <v-toolbar-items>
+                    <v-btn text to="/admin/auctions">Auctions</v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
             <v-container
                     class="fill-height"
                     fluid
@@ -24,6 +33,9 @@
         computed: {
             loggedIn() {
                 return this.$auth.logged;
+            },
+            admin() {
+                return this.$auth.admin;
             }
         }
     });

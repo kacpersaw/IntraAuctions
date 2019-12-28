@@ -14,14 +14,14 @@
                         dark
                         flat
                 >
-                    <v-toolbar-title>Aukcja #1</v-toolbar-title>
+                    <v-toolbar-title>Auction #{{auction.id}}</v-toolbar-title>
                     <v-spacer/>
                     <v-chip
                             class="ma-2"
                             color="red"
                             text-color="white"
                     >
-                        Koniec za 10 dni
+                        End within
                         <v-icon right>mdi-clock</v-icon>
                     </v-chip>
                 </v-toolbar>
@@ -30,33 +30,30 @@
                         <v-col>
                             <v-list-item>
                                 <v-list-item-content>
-                                    <v-list-item-title class="headline">Lorem ipsum</v-list-item-title>
-                                    <v-list-item-subtitle>Lorem ipsum dolor sit emet
-                                    </v-list-item-subtitle>
+                                    <v-list-item-title class="headline">{{auction.title}}</v-list-item-title>
+                                    <v-list-item-subtitle>{{auction.short_description}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-card-text>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non eros
-                                ullamcorper, convallis tortor aliquam, iaculis erat. Nulla commodo, ipsum
-                                convallis ultrices faucibus, quam sapien placerat quam, bibendum tincidunt
-                                nibh dui ac sem. Integer bibendum velit quis lacus eleifend, eget congue ex
-                                interdum.
+                                {{auction.description}}
                             </v-card-text>
                         </v-col>
                         <v-col>
                             <v-row style="padding-right: 16px">
                                 <v-col
-                                        v-for="n in 6"
-                                        :key="n"
+                                        v-for="img in auction.images"
+                                        :key="img.id"
                                         class="d-flex child-flex"
                                         cols="4"
                                 >
                                     <v-card flat tile class="d-flex">
                                         <v-img
-                                                :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                                                :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                                                :src="`${apiUrl}/${img.url}`"
+                                                :lazy-src="`${apiUrl}/${img.url}`"
                                                 aspect-ratio="1"
                                                 class="grey lighten-2"
+                                                @click="open(`${apiUrl}/${img.url}`)"
+                                                style="cursor: pointer;"
                                         >
                                             <template v-slot:placeholder>
                                                 <v-row
@@ -77,14 +74,14 @@
                     <v-divider></v-divider>
                     <v-row justify="center">
                         <v-col align="center">
-                            <p class="subtitle-1 font-weight-light mb-0">Aktualna cena</p>
-                            <p class="display-1 mb-0">25 843 zł</p>
+                            <p class="subtitle-1 font-weight-light mb-0">Actual price</p>
+                            <p class="display-1 mb-0">{{auction.actual_price}} zł</p>
                         </v-col>
                     </v-row>
                     <v-row justify="center">
                         <v-col md="4">
                             <v-text-field
-                                    label="Twoja oferta"
+                                    label="Your offer"
                                     outlined
                                     suffix="zł"
                             ></v-text-field>
@@ -93,11 +90,65 @@
                             <v-btn block
                                    color="primary"
                                    height="55"
-                            >Licytuj</v-btn>
+                            >Bid</v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
             </v-card>
         </v-col>
+        <vue-easy-lightbox
+                moveDisabled
+                :visible="visible"
+                :index="0"
+                :imgs="img"
+                @hide="visible = false"
+        >
+        </vue-easy-lightbox>
     </v-row>
 </template>
+
+<script lang="ts">
+    import Vue from 'vue';
+    import moment from "moment";
+
+    export default Vue.extend({
+        name: 'Auctions',
+
+        data: () => ({
+            auction: {},
+            img: 'http://localhost:9090/images/1VXURDlR25r9AcXRc5SWjVJlzOg.jpg',
+            visible: false,
+        }),
+
+        computed: {
+            apiUrl() {
+                return this.$apiUrl;
+            },
+        },
+
+        mounted() {
+            this.getActive()
+        },
+
+        methods: {
+            getActive() {
+                this.$http.get('/v1/auction/active').then((res: any) => {
+                    this.auction = res.data;
+                })
+            },
+            open(url: string) {
+                // eslint-disable-next-line no-console
+                console.log(url);
+                this.img = url;
+                this.visible = true;
+            },
+        },
+        filters: {
+            formatDate: function (value: string) {
+                if (value) {
+                    return moment(value).format('DD-MM-YYYY HH:mm')
+                }
+            }
+        }
+    });
+</script>

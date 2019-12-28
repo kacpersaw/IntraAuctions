@@ -16,7 +16,7 @@ func InitDB() *gorm.DB {
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True", config.DB_USERNAME, config.DB_PASSWORD, config.DB_HOST, config.DB_PORT, config.DB_NAME))
 	if err != nil {
 		logrus.Error(err.Error())
-		panic("Faield to connect to database")
+		panic("Failed to connect to database")
 	}
 
 	err = db.DB().Ping()
@@ -24,8 +24,11 @@ func InitDB() *gorm.DB {
 		logrus.Panic("Ping to db failed")
 	}
 
-	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Auction{})
+	db.AutoMigrate(&Image{})
+	db.AutoMigrate(&Bid{})
+
+	db.LogMode(true)
 
 	logrus.Info("Connection to database established successfully!")
 

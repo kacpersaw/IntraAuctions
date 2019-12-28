@@ -5,29 +5,33 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import axios, {AxiosStatic} from "axios";
 import auth, {AuthInterface} from './auth';
+// @ts-ignore
+import DatetimePicker from 'vuetify-datetime-picker'
+import Lightbox from 'vue-easy-lightbox';
 
-Vue.config.productionTip = false
+Vue.use(DatetimePicker);
+Vue.use(Lightbox);
+
+Vue.config.productionTip = false;
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 Vue.prototype.$http = axios;
+Vue.prototype.$auth = auth;
+Vue.prototype.$apiUrl = process.env.VUE_APP_API_URL;
+
 declare module 'vue/types/vue' {
   interface Vue {
     $http: AxiosStatic;
+    $auth: AuthInterface;
+    $apiUrl: string;
   }
 }
 
-Vue.prototype.$auth = auth;
-declare module 'vue/types/vue' {
-  interface Vue {
-    $auth: AuthInterface
-  }
-}
-
-auth.checkAuthentication()
+auth.checkAuthentication();
 
 new Vue({
   router,
   store,
   vuetify,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
