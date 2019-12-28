@@ -7,7 +7,7 @@ type Bid struct {
 
 	Bid float32 `gorm:"bid" json:"bid"`
 
-	Username string `gorm:"username" json:"username"`
+	Uid string `gorm:"uid" json:"uid"`
 
 	AuctionID int `gorm:"column:auction_id" json:"auction_id"`
 

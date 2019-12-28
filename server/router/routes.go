@@ -95,11 +95,29 @@ var routes = Routes{
 		true,
 	},
 	Route{
+		"Get auction details",
+		"GET",
+		"/auction/{id}",
+		handler.AuctionDetails,
+		true,
+		true,
+	},
+	Route{
 		"Set active auction",
 		"PUT",
 		"/auction/{id}/active",
 		handler.AuctionSetActive,
 		true,
 		true,
+	},
+
+	//Bids
+	Route{
+		"Bid auction",
+		"PUT",
+		"/auction/{id}/bid",
+		handler.AuctionBid,
+		true,
+		false,
 	},
 }

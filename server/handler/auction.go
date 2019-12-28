@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/kacpersaw/intra-auctions/config"
 	"github.com/kacpersaw/intra-auctions/model"
@@ -25,6 +26,10 @@ type AuctionRequest struct {
 
 	StartDate time.Time `json:"start_date"`
 	EndDate   time.Time `json:"end_date"`
+}
+
+type BidRequest struct {
+	Bid float32 `json:"bid"`
 }
 
 func AuctionCreate(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +84,7 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 		Description:      data.Description,
 		StartPrice:       data.StartPrice,
 		MinimumBid:       data.MinimumBid,
-		ActualPrice:      0,
+		ActualPrice:      data.StartPrice,
 		StartDate:        data.StartDate,
 		EndDate:          data.EndDate,
 		Images:           images,
@@ -120,4 +125,58 @@ func AuctionGetActive(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	util.MustEncode(json.NewEncoder(w), auction)
+}
+
+func AuctionDetails(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	var auction model.Auction
+	model.DB.Where("id = ?", params["id"]).First(&auction)
+	model.DB.Model(&auction).Related(&auction.Images)
+	model.DB.Model(&auction).Related(&auction.Bids)
+
+	w.WriteHeader(http.StatusOK)
+	util.MustEncode(json.NewEncoder(w), auction)
+}
+
+func AuctionBid(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	var auction model.Auction
+	if model.DB.Where("id = ?", params["id"]).First(&auction).RecordNotFound() {
+		logrus.Error("Could not find given auction")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	currentTime := time.Now()
+	if currentTime.Before(auction.StartDate) || currentTime.After(auction.EndDate) {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	data := BidRequest{}
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		logrus.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if data.Bid <= 0 || data.Bid < auction.MinimumBid {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	bid := model.Bid{
+		Bid:       data.Bid,
+		Uid:       context.Get(r, "uid").(string),
+		AuctionID: auction.ID,
+	}
+	model.DB.Save(&bid)
+
+	auction.ActualPrice = auction.ActualPrice + data.Bid
+	model.DB.Save(&auction)
+
+	w.WriteHeader(http.StatusOK)
 }
