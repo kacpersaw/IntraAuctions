@@ -86,7 +86,7 @@
         methods: {
             login() {
                 this.error = '';
-                this.$auth.login(this, this.form, "auction")
+                this.$auth.login(this, this.form, "/")
             }
         }
     });

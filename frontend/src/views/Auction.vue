@@ -14,7 +14,7 @@
                         dark
                         flat
                 >
-                    <v-toolbar-title>Auction #{{auction.id}}</v-toolbar-title>
+                    <v-toolbar-title>Auction</v-toolbar-title>
                     <v-spacer/>
                     <v-chip
                             class="ma-2"
@@ -24,10 +24,27 @@
                         End within
                         <v-icon right>mdi-clock</v-icon>
                     </v-chip>
+                    <v-menu bottom left>
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                    dark
+                                    icon
+                                    v-on="on"
+                            >
+                                <v-icon>more_vert</v-icon>
+                            </v-btn>
+                        </template>
+
+                        <v-list>
+                            <v-list-item @click="logout()">
+                                <v-list-item-title>Log out</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </v-toolbar>
                 <v-container>
                     <v-row>
-                        <v-col>
+                        <v-col cols="6">
                             <v-list-item>
                                 <v-list-item-content>
                                     <v-list-item-title class="headline">{{auction.title}}</v-list-item-title>
@@ -38,8 +55,8 @@
                                 {{auction.description}}
                             </v-card-text>
                         </v-col>
-                        <v-col>
-                            <v-row style="padding-right: 16px">
+                        <v-col cols="6">
+                            <v-row>
                                 <v-col
                                         v-for="img in auction.images"
                                         :key="img.id"
@@ -62,7 +79,8 @@
                                                         justify="center"
                                                 >
                                                     <v-progress-circular indeterminate
-                                                                         color="grey lighten-5"></v-progress-circular>
+                                                                         color="grey lighten-5">
+                                                    </v-progress-circular>
                                                 </v-row>
                                             </template>
                                         </v-img>
@@ -142,6 +160,9 @@
                 this.img = url;
                 this.visible = true;
             },
+            logout() {
+                this.$auth.logout();
+            }
         },
         filters: {
             formatDate: function (value: string) {
