@@ -39,8 +39,28 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	data := AuctionRequest{}
+	err = json.Unmarshal([]byte(r.FormValue("auction")), &data)
+	if err != nil {
+		logrus.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	auction := model.Auction{
+		Active:           false,
+		Title:            data.Title,
+		ShortDescription: data.ShortDescription,
+		Description:      data.Description,
+		StartPrice:       data.StartPrice,
+		MinimumBid:       data.MinimumBid,
+		ActualPrice:      data.StartPrice,
+		StartDate:        data.StartDate,
+		EndDate:          data.EndDate,
+	}
+	model.DB.Save(&auction)
+
 	m := r.MultipartForm
-	var images []model.Image
 	files := m.File["images"]
 	for i, _ := range files {
 		file, err := files[i].Open()
@@ -64,32 +84,12 @@ func AuctionCreate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		images = append(images, model.Image{
-			Url: "/images/" + filename,
-		})
+		image := model.Image{
+			Url:       "/images/" + filename,
+			AuctionID: auction.ID,
+		}
+		model.DB.Save(&image)
 	}
-
-	data := AuctionRequest{}
-	err = json.Unmarshal([]byte(r.FormValue("auction")), &data)
-	if err != nil {
-		logrus.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	auction := model.Auction{
-		Active:           false,
-		Title:            data.Title,
-		ShortDescription: data.ShortDescription,
-		Description:      data.Description,
-		StartPrice:       data.StartPrice,
-		MinimumBid:       data.MinimumBid,
-		ActualPrice:      data.StartPrice,
-		StartDate:        data.StartDate,
-		EndDate:          data.EndDate,
-		Images:           images,
-	}
-	model.DB.Save(&auction)
 
 	w.WriteHeader(http.StatusOK)
 	util.MustEncode(json.NewEncoder(w), auction)

@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"github.com/gofrs/uuid"
+	"time"
+)
 
 type Bid struct {
 	ID int `gorm:"primary_key" json:"id"`
@@ -9,7 +12,7 @@ type Bid struct {
 
 	Uid string `gorm:"uid" json:"uid"`
 
-	AuctionID int `gorm:"column:auction_id" json:"auction_id"`
+	AuctionID uuid.UUID `gorm:"type:varchar(36);column:auction_id;" json:"auction_id"`
 
 	// Created at timestamp
 	CreatedAt time.Time `json:"created_at"`

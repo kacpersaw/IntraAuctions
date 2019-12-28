@@ -8,7 +8,7 @@ import (
 )
 
 type Auction struct {
-	ID uuid.UUID `gorm:"primary_key;type:varchar(36)" json:"id"`
+	ID uuid.UUID `gorm:"type:varchar(36);primary_key;column:id" json:"id"`
 
 	Active bool `gorm:"column:active" json:"active"`
 
