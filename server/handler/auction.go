@@ -163,7 +163,7 @@ func AuctionBid(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if data.Bid <= 0 || data.Bid < auction.MinimalBid {
+	if data.Bid <= 0 || data.Bid < (auction.ActualPrice+auction.MinimalBid) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -175,7 +175,7 @@ func AuctionBid(w http.ResponseWriter, r *http.Request) {
 	}
 	model.DB.Save(&bid)
 
-	auction.ActualPrice = auction.ActualPrice + data.Bid
+	auction.ActualPrice = data.Bid
 	model.DB.Save(&auction)
 
 	w.WriteHeader(http.StatusOK)
