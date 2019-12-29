@@ -3,6 +3,7 @@ module github.com/kacpersaw/intra-auctions
 go 1.13
 
 require (
+	github.com/alexandrevicenzi/go-sse v0.0.0-20191008221740-c629c4a96646
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-ldap/ldap/v3 v3.1.5 // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible

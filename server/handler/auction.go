@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/alexandrevicenzi/go-sse"
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/kacpersaw/intra-auctions/config"
+	"github.com/kacpersaw/intra-auctions/events"
 	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/kacpersaw/intra-auctions/util"
 	"github.com/segmentio/ksuid"
@@ -177,6 +179,9 @@ func AuctionBid(w http.ResponseWriter, r *http.Request) {
 
 	auction.ActualPrice = data.Bid
 	model.DB.Save(&auction)
+
+	auctionStr, _ := json.Marshal(auction)
+	events.SSE.SendMessage("/v1/events/"+auction.ID.String(), sse.SimpleMessage(string(auctionStr)))
 
 	w.WriteHeader(http.StatusOK)
 }

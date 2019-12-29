@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/kacpersaw/intra-auctions/config"
+	"github.com/kacpersaw/intra-auctions/events"
 	"github.com/kacpersaw/intra-auctions/ldap"
 	"github.com/kacpersaw/intra-auctions/model"
 	"github.com/kacpersaw/intra-auctions/router"
@@ -23,6 +24,7 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		model.DB = model.InitDB()
 		ldap.LDAP = ldap.InitLDAP()
+		events.SSE = events.InitSSE()
 
 		if _, err := os.Stat(config.IMG_DIR); os.IsNotExist(err) {
 			os.Mkdir(config.IMG_DIR, os.ModePerm)

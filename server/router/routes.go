@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gorilla/mux"
 	"github.com/kacpersaw/intra-auctions/config"
+	"github.com/kacpersaw/intra-auctions/events"
 	"github.com/kacpersaw/intra-auctions/handler"
 	"net/http"
 )
@@ -117,6 +118,16 @@ var routes = Routes{
 		"PUT",
 		"/auction/{id}/bid",
 		handler.AuctionBid,
+		true,
+		false,
+	},
+
+	//Events
+	Route{
+		"Events",
+		"GET",
+		"/events/{channel}",
+		events.Handler,
 		true,
 		false,
 	},

@@ -158,13 +158,14 @@
             bid: 0,
             interval: 0,
             now: new Date(),
+            stream: '' as any,
         }),
 
         computed: {
             bidRules() {
                 return [
                     (val: number) => !!val || this.$t('general.required'),
-                    (val: number) => val >= this.auction.minimal_bid || this.$t('bid.minimalIs',
+                    (val: number) => val >= (this.auction.actual_price + this.auction.minimal_bid) || this.$t('bid.minimalIs',
                         [this.auction.minimal_bid])
                 ]
             },
@@ -180,7 +181,7 @@
 
             this.interval = setInterval(() => {
                 this.now = new Date()
-            }, 1000)
+            }, 1000);
         },
 
         methods: {
@@ -189,7 +190,11 @@
                     this.auction = res.data;
                     this.auction.end_date = moment(res.data.end_date).toDate();
                     this.auction.start_date = moment(res.data.start_date).toDate();
-                    this.bid = this.auction.minimal_bid
+                    this.bid = this.auction.actual_price + this.auction.minimal_bid;
+
+                    if(this.stream === '' || this.stream === undefined) {
+                        this.setupStream()
+                    }
                 })
             },
             open(url: string) {
@@ -204,7 +209,7 @@
             },
             bidAuction() {
                 this.$http.put('/v1/auction/' + this.auction.id + '/bid', {
-                    bid: this.bid as number
+                    bid: +this.bid
                 }).then((res) => {
                     this.$toast(this.$tc('bid.success'), {
                         color: 'success',
@@ -226,6 +231,27 @@
                 moment.locale(lang);
                 this.$vuetify.lang.current = lang;
                 this.$i18n.locale = lang;
+            },
+            setupStream() {
+                this.stream = new this.$eventSource(this.$apiUrl + '/v1/events/' + this.auction.id, {
+                    headers: {
+                        Authorization: this.$auth.getAuthorizationHeader()
+                    }
+                });
+
+                this.stream.onerror = (event: any) => {
+                    // eslint-disable-next-line no-console
+                    console.log('error', event)
+                };
+
+                this.stream.addEventListener('message', (event: any) => {
+                    if(event.data === 'heartbeat') {
+                        return
+                    }
+                    let data = JSON.parse(event.data);
+                    this.auction.actual_price = data.actual_price;
+                    this.bid = this.auction.actual_price + this.auction.minimal_bid;
+                }, false)
             }
         },
         filters: {
@@ -237,6 +263,7 @@
             }
         },
         beforeDestroy(): void {
+            this.stream.close()
             clearInterval(this.interval)
         }
     });

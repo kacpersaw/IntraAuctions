@@ -14,6 +14,9 @@ import Lightbox from 'vue-easy-lightbox';
 import vueAwesomeCountdown from 'vue-awesome-countdown';
 import moment from "moment";
 
+// @ts-ignore
+import { EventSourcePolyfill } from 'event-source-polyfill';
+
 Vue.use(DatetimePicker);
 Vue.use(Lightbox);
 Vue.use(vueAwesomeCountdown);
@@ -24,12 +27,14 @@ axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 Vue.prototype.$http = axios;
 Vue.prototype.$auth = auth;
 Vue.prototype.$apiUrl = process.env.VUE_APP_API_URL;
+Vue.prototype.$eventSource = EventSourcePolyfill
 
 declare module 'vue/types/vue' {
     interface Vue {
         $http: AxiosStatic;
         $auth: AuthInterface;
         $apiUrl: string;
+        $eventSource: any;
     }
 }
 
