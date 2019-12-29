@@ -14,7 +14,7 @@
                         dark
                         flat
                 >
-                    <v-toolbar-title>{{ $t("login") }}</v-toolbar-title>
+                    <v-toolbar-title>{{ $t("auth.login") }}</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
                     <v-alert
@@ -31,7 +31,7 @@
                             @keyup.native.enter="valid && login()"
                     >
                         <v-text-field
-                                :label="$t('username')"
+                                :label="$t('auth.username')"
                                 prepend-icon="account_box"
                                 type="text"
                                 v-model="form.username"
@@ -40,7 +40,7 @@
                         />
 
                         <v-text-field
-                                :label="$t('password')"
+                                :label="$t('auth.password')"
                                 prepend-icon="lock"
                                 type="password"
                                 v-model="form.password"
@@ -51,7 +51,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn color="primary" :disabled="!valid" @click="login()">{{$t('loginButton')}}</v-btn>
+                    <v-btn color="primary" :disabled="!valid" @click="login()">{{$t('auth.loginButton')}}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -77,14 +77,14 @@
             usernameRules() {
                 return [
                     (v: string) => {
-                        return !!v || this.$t('usernameRequired');
+                        return !!v || this.$t('auth.usernameRequired');
                     },
                 ]
             },
             passwordRules() {
                 return [
                     (v: string) => {
-                        return !!v || this.$t('passwordRequired')
+                        return !!v || this.$t('auth.passwordRequired')
                     }
                 ]
             }

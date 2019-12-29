@@ -35,7 +35,7 @@ declare module 'vue/types/vue' {
 
 auth.checkAuthentication();
 
-moment.locale('en');
+moment.locale('pl');
 
 new Vue({
     router,

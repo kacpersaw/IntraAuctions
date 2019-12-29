@@ -1,10 +1,63 @@
 {
-  "login": "Login",
-  "username": "Username",
-  "password": "Password",
-  "loginButton": "Login",
-  "usernameRequired": "Username is required",
-  "passwordRequired": "Password is required",
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "logout": "Log out"
+  },
+  "general": {
+    "error": {
+      "network": "Network error",
+      "generic": "Something went wrong :("
+    },
+    "required": "Required",
+    "yes": "Yes",
+    "no": "No",
+    "delete": "Delete",
+    "close": "Close",
+    "add": "Add",
+    "date": "Date"
+  },
+  "auction": {
+    "auction": "Auction",
+    "end": "End",
+    "actualPrice": "Actual price",
+    "yourOffer": "Your offer",
+    "details": "Auction Details",
 
-  "networkError": "Network error"
+    "auctions": "Auctions",
+    "list": "Auction list",
+    "add": "Add auction",
+    "setActive": "Set active",
+
+    "toasts": {
+      "created": "Auction created successfully!",
+      "removed": "Auction removed successfully!",
+      "active": "Auction has been set to active!"
+    },
+
+    "title": "Title",
+    "shortDescription": "Short description",
+    "description": "Description",
+    "startPrice": "Start price",
+    "minimalBid": "Minimal bid",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "pictures": "Pictures",
+    "active": "Active"
+  },
+  "bid": {
+    "button": "Bid",
+    "success": "Bid made successfully!",
+    "minimalIs": "Minimal bid is {0}",
+    "bids": "Bids",
+    "bid": "Bid"
+  },
+
+  "admin": {
+    "title": "Administration"
+  }
 }

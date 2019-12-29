@@ -14,14 +14,14 @@
                         dark
                         flat
                 >
-                    <v-toolbar-title>Auction</v-toolbar-title>
+                    <v-toolbar-title>{{$t('auction.auction')}}</v-toolbar-title>
                     <v-spacer/>
                     <v-chip
                             class="ma-2"
                             color="red"
                             text-color="white"
                     >
-                        End {{timer}}
+                        {{$t('auction.end')}} {{timer}}
                         <v-icon right>mdi-clock</v-icon>
                     </v-chip>
                     <v-menu bottom left>
@@ -37,7 +37,13 @@
 
                         <v-list>
                             <v-list-item @click="logout()">
-                                <v-list-item-title>Log out</v-list-item-title>
+                                <v-list-item-title>{{$t('auth.logout')}}</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="changeLang('en')">
+                                <v-list-item-title>English</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item @click="changeLang('pl')">
+                                <v-list-item-title>Polski</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -92,7 +98,7 @@
                     <v-divider></v-divider>
                     <v-row justify="center">
                         <v-col align="center">
-                            <p class="subtitle-1 font-weight-light mb-0">Actual price</p>
+                            <p class="subtitle-1 font-weight-light mb-0">{{$t('auction.actualPrice')}}</p>
                             <p class="display-1 mb-0">{{auction.actual_price}} zł</p>
                         </v-col>
                     </v-row>
@@ -100,7 +106,7 @@
                         <v-row justify="center">
                             <v-col md="4">
                                 <v-text-field
-                                        label="Your offer"
+                                        :label="$t('auction.yourOffer')"
                                         outlined
                                         suffix="zł"
                                         type="number"
@@ -116,7 +122,8 @@
                                        height="55"
                                        :disabled="!bidValid"
                                        @click="bidAuction()"
-                                >Bid
+                                >
+                                    {{$t('bid.button')}}
                                 </v-btn>
                             </v-col>
                         </v-row>
@@ -141,7 +148,7 @@
     import {Auction} from '@/types/api';
 
     export default Vue.extend({
-        name: 'Auctions',
+        name: 'Auction',
 
         data: () => ({
             auction: {} as Auction,
@@ -156,8 +163,9 @@
         computed: {
             bidRules() {
                 return [
-                    (val: number) => !!val || 'Required',
-                    (val: number) => val >= this.auction.minimal_bid || 'Minimal bid is ' + this.auction.minimal_bid
+                    (val: number) => !!val || this.$t('general.required'),
+                    (val: number) => val >= this.auction.minimal_bid || this.$t('bid.minimalIs',
+                        [this.auction.minimal_bid])
                 ]
             },
             timer() {
@@ -198,13 +206,13 @@
                 this.$http.put('/v1/auction/' + this.auction.id + '/bid', {
                     bid: this.bid as number
                 }).then((res) => {
-                    this.$toast('Bid made successfully!', {
+                    this.$toast(this.$tc('bid.success'), {
                         color: 'success',
                     });
 
                     this.getActive()
                 }).catch((err) => {
-                    this.$toast('Something went wrong :(', {
+                    this.$toast(this.$tc('general.error.generic'), {
                         color: 'red',
                     })
                 })
@@ -213,6 +221,11 @@
                 return 0 < then - now
                     ? moment.utc(then - now).format('HH:mm:ss')
                     : '- ' + moment.utc(now - then).format('HH:mm:ss')
+            },
+            changeLang(lang: string) {
+                moment.locale(lang);
+                this.$vuetify.lang.current = lang;
+                this.$i18n.locale = lang;
             }
         },
         filters: {
