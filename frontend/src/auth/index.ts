@@ -41,7 +41,7 @@ export default new Vue({
                 }
             }).catch((e: any) => {
                 if(!e.response) {
-                    context.error = 'Network error';
+                    context.error = this.$t('general.error.network');
                 } else {
                     context.error = e.response.data.message;
                 }

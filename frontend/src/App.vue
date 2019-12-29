@@ -2,12 +2,12 @@
     <v-app>
         <v-content>
             <v-toolbar v-if="admin">
-                <v-toolbar-title>Administration</v-toolbar-title>
+                <v-toolbar-title>{{$t('admin.title')}}</v-toolbar-title>
 
                 <v-spacer></v-spacer>
 
                 <v-toolbar-items>
-                    <v-btn text to="/admin/auctions">Auctions</v-btn>
+                    <v-btn text to="/admin/auctions">{{$t('auction.auctions')}}</v-btn>
                 </v-toolbar-items>
             </v-toolbar>
             <v-container
@@ -21,6 +21,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
+    import moment from "moment";
 
     export default Vue.extend({
         name: 'App',

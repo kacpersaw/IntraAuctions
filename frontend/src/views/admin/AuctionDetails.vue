@@ -17,7 +17,7 @@
                     <v-btn icon class="hidden-xs-only" @click="goToAuctions()">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Auction Details</v-toolbar-title>
+                    <v-toolbar-title>{{$t('auction.details')}}</v-toolbar-title>
                     <v-spacer/>
                 </v-toolbar>
                 <v-container>
@@ -26,49 +26,49 @@
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{auction.title}}</v-list-item-title>
-                                    <v-list-item-subtitle>Title</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.title')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{auction.short_description}}</v-list-item-title>
-                                    <v-list-item-subtitle>Short description</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.shortDescription')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <p>{{auction.description}}</p>
-                                    <v-list-item-subtitle>Description</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.description')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{auction.start_price}}</v-list-item-title>
-                                    <v-list-item-subtitle>Start price</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.startPrice')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{auction.actual_price}}</v-list-item-title>
-                                    <v-list-item-subtitle>Actual price</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.actualPrice')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
-                                    <v-list-item-title>{{auction.minimum_bid}}</v-list-item-title>
-                                    <v-list-item-subtitle>Minimum bid</v-list-item-subtitle>
+                                    <v-list-item-title>{{auction.minimal_bid}}</v-list-item-title>
+                                    <v-list-item-subtitle>{{$t('auction.minimalBid')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{auction.start_date | formatDate}}</v-list-item-title>
-                                    <v-list-item-subtitle>Start date</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.startDate')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                             <v-list-item two-line>
                                 <v-list-item-content>
                                     <v-list-item-title>{{auction.end_date | formatDate}}</v-list-item-title>
-                                    <v-list-item-subtitle>End date</v-list-item-subtitle>
+                                    <v-list-item-subtitle>{{$t('auction.endDate')}}</v-list-item-subtitle>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-col>
@@ -114,7 +114,7 @@
                             >
                                 <template v-slot:top>
                                     <v-toolbar flat color="white">
-                                        <v-toolbar-title>Bids</v-toolbar-title>
+                                        <v-toolbar-title>{{$t('bid.bids')}}</v-toolbar-title>
                                     </v-toolbar>
                                 </template>
                                 <template v-slot:item.created_at="{ item }">
@@ -139,22 +139,27 @@
 
         data: () => ({
             auction: {} as Auction,
-            headers: [
-                {
-                    text: 'Username',
-                    value: 'uid',
-                    align: 'left',
-                },
-                {
-                    text: 'Bid',
-                    value: 'bid',
-                },
-                {
-                    text: 'Date',
-                    value: 'created_at',
-                }
-            ]
         }),
+
+        computed: {
+            headers() {
+                return [
+                    {
+                        text: this.$t('auth.username'),
+                        value: 'uid',
+                        align: 'left',
+                    },
+                    {
+                        text: this.$t('bid.bid'),
+                        value: 'bid',
+                    },
+                    {
+                        text: this.$t('general.date'),
+                        value: 'created_at',
+                    }
+                ]
+            }
+        },
 
         mounted() {
             this.getAuction()

@@ -14,12 +14,12 @@
                         dark
                         flat
                 >
-                    <v-toolbar-title>Auction list</v-toolbar-title>
+                    <v-toolbar-title>{{$t('auction.list')}}</v-toolbar-title>
                     <v-spacer/>
-                    <v-btn class="ma-2" tile color="green" v-if="selected.length > 0" @click="setActive()">Set active</v-btn>
-                    <v-btn class="ma-2" tile color="red" v-if="selected.length > 0" @click="deleteAuction()">Delete</v-btn>
+                    <v-btn class="ma-2" tile color="green" v-if="selected.length > 0" @click="setActive()">{{$t('auction.setActive')}}</v-btn>
+                    <v-btn class="ma-2" tile color="red" v-if="selected.length > 0" @click="deleteAuction()">{{$t('general.delete')}}</v-btn>
                     <v-divider vertical></v-divider>
-                    <v-btn class="ma-2" tile color="blue" @click="addAuctionDialog()">Add auction</v-btn>
+                    <v-btn class="ma-2" tile color="blue" @click="addAuctionDialog()">{{$t('auction.add')}}</v-btn>
                 </v-toolbar>
                 <v-container>
                     <v-data-table
@@ -38,8 +38,8 @@
                             {{item.end_date | formatDate}}
                         </template>
                         <template v-slot:item.active="{ item }">
-                            <v-chip color="green" v-if="item.active" dark>Yes</v-chip>
-                            <v-chip color="red" v-if="!item.active" dark>No</v-chip>
+                            <v-chip color="green" v-if="item.active" dark>{{$t('general.yes')}}</v-chip>
+                            <v-chip color="red" v-if="!item.active" dark>{{$t('general.no')}}</v-chip>
                         </template>
                     </v-data-table>
                 </v-container>
@@ -56,7 +56,7 @@
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field
-                                        label="Title"
+                                        :label="$t('auction.title')"
                                         required
                                         v-model="form.title"
                                 >
@@ -64,7 +64,7 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field
-                                        label="Short description"
+                                        :label="$t('auction.shortDescription')"
                                         required
                                         v-model="form.short_description"
                                 >
@@ -72,7 +72,7 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-textarea
-                                        label="Description"
+                                        :label="$t('auction.description')"
                                         required
                                         v-model="form.description"
                                 >
@@ -81,7 +81,7 @@
                             <v-col cols="12">
                                 <v-text-field
                                         type="number"
-                                        label="Start price"
+                                        :label="$t('auction.startPrice')"
                                         required
                                         v-model="form.start_price"
                                 >
@@ -90,15 +90,16 @@
                             <v-col cols="12">
                                 <v-text-field
                                         type="number"
-                                        label="Minimum bid"
+                                        :label="$t('auction.minimalBid')"
                                         required
-                                        v-model="form.minimum_bid"
+                                        v-model="form.minimal_bid"
                                 >
                                 </v-text-field>
                             </v-col>
 
                             <v-col cols="12">
                                 <v-datetime-picker
+                                        :label="$t('auction.startDate')"
                                         v-model="form.start_date"
                                         :time-picker-props="timePickerProps"
                                 >
@@ -106,6 +107,7 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-datetime-picker
+                                        :label="$t('auction.endDate')"
                                         v-model="form.end_date"
                                         :time-picker-props="timePickerProps"
                                 >
@@ -115,7 +117,7 @@
                                 <v-file-input
                                         accept="image/*"
                                         multiple
-                                        label="Pictures"
+                                        :label="$t('auction.pictures')"
                                         chips
                                         v-model="form.images">
                                 </v-file-input>
@@ -125,8 +127,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" text @click="addAuction()">Add</v-btn>
+                    <v-btn color="blue darken-1" text @click="dialog = false">{{$t('general.close')}}</v-btn>
+                    <v-btn color="blue darken-1" text @click="addAuction()">{{$t('general.add')}}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -150,7 +152,7 @@
                 short_description: '',
                 description: '',
                 start_price: 0,
-                minimum_bid: 0,
+                minimal_bid: 0,
                 start_date: new Date(),
                 end_date: new Date(),
                 images: []
@@ -158,26 +160,31 @@
             timePickerProps: {
                 format: '24h'
             },
-            headers: [
-                {
-                    text: 'Title',
-                    value: 'title',
-                    align: 'left',
-                },
-                {
-                    text: 'Start date',
-                    value: 'start_date',
-                },
-                {
-                    text: 'End date',
-                    value: 'end_date',
-                },
-                {
-                    text: 'Active',
-                    value: 'active'
-                }
-            ]
         }),
+
+        computed: {
+            headers() {
+                return [
+                    {
+                        text: this.$t('auction.title'),
+                        value: 'title',
+                        align: 'left',
+                    },
+                    {
+                        text: this.$t('auction.startDate'),
+                        value: 'start_date',
+                    },
+                    {
+                        text: this.$t('auction.endDate'),
+                        value: 'end_date',
+                    },
+                    {
+                        text: this.$t('auction.active'),
+                        value: 'active'
+                    }
+                ]
+            }
+        },
 
         mounted(): void {
             this.listAuctions()
@@ -196,7 +203,7 @@
                     short_description: '',
                     description: '',
                     start_price: 0,
-                    minimum_bid: 0,
+                    minimal_bid: 0,
                     start_date: new Date(),
                     end_date: new Date(),
                     images: []
@@ -209,7 +216,7 @@
                     short_description: this.form.short_description,
                     description: this.form.description,
                     start_price: +this.form.start_price,
-                    minimum_bid: +this.form.minimum_bid,
+                    minimum_bid: +this.form.minimal_bid,
                     start_date: this.form.start_date.toISOString(),
                     end_date: this.form.end_date.toISOString(),
                 }));
@@ -221,13 +228,13 @@
                 this.$http.post('/v1/auction', data, {
                     headers: {'Content-Type': 'multipart/form-data'}
                 }).then((res) => {
-                    this.$toast('Auction created successfully!', {
+                    this.$toast(this.$tc('auction.toasts.created'), {
                         color: 'success',
                     });
                     this.dialog = false;
                     this.listAuctions()
                 }).catch((res: any) => {
-                    this.$toast('Invalid error occurred. Try again.', {
+                    this.$toast(this.$tc('general.error.generic'), {
                         color: 'red',
                     })
                 })
@@ -235,7 +242,7 @@
             setActive() {
                 let selected:any = this.selected[0];
                 this.$http.put(`/v1/auction/${selected!.id}/active`).then((res) => {
-                    this.$toast('Auction was set to active!', {
+                    this.$toast(this.$tc('auction.toasts.active'), {
                         color: 'success',
                     });
                     this.selected = [];
@@ -245,7 +252,7 @@
             deleteAuction(): void {
                 let selected:any = this.selected[0];
                 this.$http.delete(`/v1/auction/${selected!.id}`).then((res) => {
-                    this.$toast('Removed auction successfully!', {
+                    this.$toast(this.$tc('auction.toasts.removed'), {
                         color: 'success',
                     });
                     this.selected = [];

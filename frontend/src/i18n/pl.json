@@ -1,0 +1,63 @@
+{
+  "auth": {
+    "login": "Logowanie",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "loginButton": "Zaloguj się",
+    "usernameRequired": "Nazwa użytkownika jest wymagana",
+    "passwordRequired": "Hasło jest wymagane",
+    "logout": "Wyloguj się"
+  },
+  "general": {
+    "error": {
+      "network": "Wystąpił problem z siecią",
+      "generic": "Coś poszło nie tak :("
+    },
+    "required": "Wymagane",
+    "yes": "Tak",
+    "no": "Nie",
+    "delete": "Usuń",
+    "close": "Zamknij",
+    "add": "Dodaj",
+    "date": "Data"
+  },
+  "auction": {
+    "auction": "Aukcja",
+    "end": "Koniec",
+    "actualPrice": "Aktualna cena",
+    "yourOffer": "Twoja oferta",
+    "details": "Szczegóły aukcji",
+
+    "auctions": "Aukcje",
+    "list": "Lista aukcji",
+    "add": "Dodaj aukcję",
+    "setActive": "Ustaw jako aktywną",
+
+    "toasts": {
+      "created": "Aukcja dodana pomyślnie!",
+      "removed": "Aukcja usunięta pomyślnie!",
+      "active": "Aukcja została ustawiona jako aktywna!"
+    },
+
+    "title": "Tytuł",
+    "shortDescription": "Krótki opis",
+    "description": "Opis",
+    "startPrice": "Cena początkowa",
+    "minimalBid": "Minimalna oferta",
+    "startDate": "Data rozpoczęcia",
+    "endDate": "Data zakończenia",
+    "pictures": "Zdjęcia",
+    "active": "Aktywna"
+  },
+  "bid": {
+    "button": "Licytuj",
+    "success": "Oferta została złożona pomyślnie!",
+    "minimalIs": "Minimalna oferta to {0}",
+    "bids": "Lista ofert",
+    "bid": "Oferta"
+  },
+
+  "admin": {
+    "title": "Administracja"
+  }
+}
