@@ -110,7 +110,7 @@
                                         outlined
                                         suffix="zł"
                                         type="number"
-                                        step="0.1"
+                                        step="1"
                                         :rules="bidRules"
                                         v-model="bid"
                                 >
@@ -166,7 +166,7 @@
                 return [
                     (val: number) => !!val || this.$t('general.required'),
                     (val: number) => val >= (this.auction.actual_price + this.auction.minimal_bid) || this.$t('bid.minimalIs',
-                        [this.auction.minimal_bid])
+                        [this.auction.actual_price + this.auction.minimal_bid])
                 ]
             },
             timer() {
