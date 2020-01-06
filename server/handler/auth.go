@@ -63,7 +63,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp":   time.Now().Add(time.Hour * 48).Unix(),
-		"uid":   ldapUser["uid"],
+		"uid":   ldapUser[config.LDAP_USERNAME_ATTRIBUTE],
 		"admin": util.StringInSlice(config.LDAP_ADMIN_GROUP_NAME, groups),
 	})
 

@@ -110,7 +110,7 @@
                                         outlined
                                         suffix="zł"
                                         type="number"
-                                        step="0.1"
+                                        step="1"
                                         :rules="bidRules"
                                         v-model="bid"
                                 >

@@ -9,16 +9,17 @@ var (
 	DB_PASSWORD string
 	DB_NAME     string
 
-	LDAP_BASE             string
-	LDAP_HOST             string
-	LDAP_PORT             int
-	LDAP_SSL              bool
-	LDAP_BIND_DN          string
-	LDAP_BIND_PASSWORD    string
-	LDAP_USER_FILTER      string
-	LDAP_ATTRIBUTES       []string
-	LDAP_GROUP_FILTER     string
-	LDAP_ADMIN_GROUP_NAME string
+	LDAP_BASE               string
+	LDAP_HOST               string
+	LDAP_PORT               int
+	LDAP_SSL                bool
+	LDAP_BIND_DN            string
+	LDAP_BIND_PASSWORD      string
+	LDAP_USER_FILTER        string
+	LDAP_ATTRIBUTES         []string
+	LDAP_GROUP_FILTER       string
+	LDAP_ADMIN_GROUP_NAME   string
+	LDAP_USERNAME_ATTRIBUTE string
 
 	JWT_SECRET string
 
@@ -72,6 +73,9 @@ func init() {
 
 	viper.SetDefault("LDAP_ADMIN_GROUP_NAME", "admin_staff")
 	LDAP_ADMIN_GROUP_NAME = viper.GetString("LDAP_ADMIN_GROUP_NAME")
+
+	viper.SetDefault("LDAP_USERNAME_ATTRIBUTE", "uid")
+	LDAP_USERNAME_ATTRIBUTE = viper.GetString("LDAP_USERNAME_ATTRIBUTE")
 
 	viper.SetDefault("JWT_SECRET", "s3cr3t")
 	JWT_SECRET = viper.GetString("JWT_SECRET")
