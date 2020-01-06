@@ -28,5 +28,9 @@ Things to do you can find in issues.
 
 ## Screenshots
 
+![Auction page](/screenshots/auction.png?raw=true "Auction page")
 
+![Auction list](/screenshots/auctionList.png?raw=true "Auction list")
+
+![Auction details](/screenshots/auctionDetails.png?raw=true "Auction details")
 
