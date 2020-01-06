@@ -7,6 +7,7 @@
                 <v-spacer></v-spacer>
 
                 <v-toolbar-items>
+                    <v-btn text to="/">Start</v-btn>
                     <v-btn text to="/admin/auctions">{{$t('auction.auctions')}}</v-btn>
                 </v-toolbar-items>
             </v-toolbar>

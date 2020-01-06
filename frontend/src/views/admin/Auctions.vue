@@ -216,7 +216,7 @@
                     short_description: this.form.short_description,
                     description: this.form.description,
                     start_price: +this.form.start_price,
-                    minimum_bid: +this.form.minimal_bid,
+                    minimal_bid: +this.form.minimal_bid,
                     start_date: this.form.start_date.toISOString(),
                     end_date: this.form.end_date.toISOString(),
                 }));

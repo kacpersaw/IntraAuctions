@@ -166,7 +166,7 @@
                 return [
                     (val: number) => !!val || this.$t('general.required'),
                     (val: number) => val >= (this.auction.actual_price + this.auction.minimal_bid) || this.$t('bid.minimalIs',
-                        [this.auction.minimal_bid])
+                        [this.auction.actual_price + this.auction.minimal_bid])
                 ]
             },
             timer() {
