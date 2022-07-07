@@ -13,7 +13,7 @@
     "event-source-polyfill": "^1.0.11",
     "eventsource-polyfill": "^0.9.6",
     "jwt-decode": "^2.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "vue": "^2.6.10",
     "vue-awesome-countdown": "^1.0.23",
     "vue-easy-lightbox": "^0.9.0",
